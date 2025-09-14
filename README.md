@@ -1,6 +1,3 @@
-Thanks for sharing the screenshot 🙌 I see this is an **n8n workflow** for automating attendance tracking and sending SMS alerts to absentees. I’ll write a **README.md** tailored for this workflow:
-
----
 
 # 📊 Attendance Automation Workflow (n8n)
 
@@ -57,16 +54,17 @@ The workflow follows these steps:
 
 ## 📊 Example Google Sheet Format
 
-| Student Name | Date       | Status  | Parent Contact |
-| ------------ | ---------- | ------- | -------------- |
-| John Doe     | 2025-09-14 | Present | +1234567890    |
-| Jane Smith   | 2025-09-14 | Absent  | +1987654321    |
+| Student Name   | Date       | Status  | Parent Contact |
+| ---------------| ---------- | ------- | -------------- |
+| Prabhas Gorusu | 2025-09-14 | Present | +916304761355    |
+| Sharief SK     | 2025-09-14 | Absent  | +917893254003    |
 
 ---
 
 ## 📸 Workflow Screenshot
 
-![Workflow Screenshot](docs/screenshots/workflow.png)
+<img width="1919" height="1079" alt="Screenshot 2025-09-14 124010" src="https://github.com/user-attachments/assets/f4fee542-1ebf-4a13-a0da-204237cc626f" />
+
 
 ---
 
