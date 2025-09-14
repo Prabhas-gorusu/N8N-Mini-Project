@@ -82,6 +82,3 @@ The workflow follows these steps:
 MIT License.
 Feel free to use and adapt this workflow for your own projects.
 
----
-
-👉 Do you want me to **export this workflow into JSON (n8n import file)** so you can include it in your repo, or just keep the README?
