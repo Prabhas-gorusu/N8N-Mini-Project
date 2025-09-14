@@ -1,0 +1,231 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 10
+            }
+          ]
+        }
+      },
+      "id": "a82394e9-8d02-45a2-85e4-36968f93a63f",
+      "name": "Cron Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1uukgL0imf85hh30LB1TxnhEKSF16qYE_5cW7K9R7OcI",
+          "mode": "list",
+          "cachedResultName": "AttendanceSheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uukgL0imf85hh30LB1TxnhEKSF16qYE_5cW7K9R7OcI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 190291584,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uukgL0imf85hh30LB1TxnhEKSF16qYE_5cW7K9R7OcI/edit#gid=190291584"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Absent"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6c3635e4-fb1f-40c7-8c5f-37787300dcda",
+      "name": "Fetch Attendance",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        -32,
+        -32
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KD1SWcYUsevH2r3Z",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"Status\"]}}",
+              "value2": "Absent"
+            }
+          ]
+        }
+      },
+      "id": "72a9decf-af9a-4efa-b720-df8c1293364e",
+      "name": "Filter Absentees",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "bdbcae23-45b7-4dd2-b43d-88e8d3c7ae3a",
+      "name": "Split Students",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        496,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "from": "+1 220 217 5469",
+        "to": "={{ '+' + $json[\"ParentPhone\"] }}",
+        "message": "Dear Parent, your child is ABSENT",
+        "options": {}
+      },
+      "id": "52300c06-74b8-469b-8076-3e0e88c25a48",
+      "name": "Send SMS",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        736,
+        -32
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "xCyEHcTQutLiVPjS",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1uukgL0imf85hh30LB1TxnhEKSF16qYE_5cW7K9R7OcI",
+          "mode": "list",
+          "cachedResultName": "AttendanceSheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uukgL0imf85hh30LB1TxnhEKSF16qYE_5cW7K9R7OcI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 190291584,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uukgL0imf85hh30LB1TxnhEKSF16qYE_5cW7K9R7OcI/edit#gid=190291584"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Yes"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        -32
+      ],
+      "id": "2c6a1344-52cc-42fc-b2b7-cb7dd0eaeea7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KD1SWcYUsevH2r3Z",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cron Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Attendance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Attendance": {
+      "main": [
+        [
+          {
+            "node": "Filter Absentees",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Absentees": {
+      "main": [
+        [
+          {
+            "node": "Split Students",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Students": {
+      "main": [
+        [
+          {
+            "node": "Send SMS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send SMS": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4fa31f05-53db-4558-a39d-3aefff3a356e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cec2fd931d1a3e0d7a07bdd886c025cb68310d9ed4711d674158fab75bc981f0"
+  },
+  "id": "QmkBuPCDw2PCtIJq",
+  "tags": []
+}
